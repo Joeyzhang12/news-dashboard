@@ -8,7 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: python3 scraper.py
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+      - name: Run scraper
+        run: python3 scraper.py
+        env:
+          HTTP_PROXY: "http://srvjxx1@app.mitce.net:531370"
+          HTTPS_PROXY: "http://srvjxx1@app.mitce.net:531370"
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: update
