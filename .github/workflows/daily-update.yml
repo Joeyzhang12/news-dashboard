@@ -12,22 +12,13 @@ on:
 jobs:
   update-news:
     runs-on: ubuntu-latest
-    env:
-      PROXY_USER: "18601139993"
-      PROXY_PASS: "Pcdog1234"
-      PROXY_API_KEY: "90b74a9e1ad7d012e19ad08d3578a156"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - run: pip install requests beautifulsoup4
-      - run: |
-          # 获取代理IP
-          PROXY=$(curl -s "http://api.xiongmaodaili.com/api/getip?num=1&type=2" -u "$PROXY_USER:$PROXY_PASS" | python3 -c "import sys,json; print(json.load(sys.stdin)['data'][0]['ip']+':'+str(json.load(sys.stdin)['data'][0]['port']))")
-          echo "Using proxy: $PROXY"
-          # 运行爬虫
-          python scraper.py
+      - run: python scraper.py
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: '🤖 Auto update'
