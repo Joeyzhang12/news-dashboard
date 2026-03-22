@@ -1,16 +1,7 @@
 #!/usr/bin/env python3
-import os, requests
+import os
 from datetime import datetime
 
-# 使用代理
-proxies = {
-    "http": "http://srvjxx1@app.mitce.net:531370",
-    "https": "http://srvjxx1@app.mitce.net:531370"
-}
-
-print("开始抓取...")
-
-# 可以抓取的源
 sources = [
     {"name": "观察者网", "cat": "地缘"},
     {"name": "华尔街见闻", "cat": "财经"},
