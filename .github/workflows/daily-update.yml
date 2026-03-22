@@ -1,0 +1,58 @@
+# 全球深度资讯自动抓取 - GitHub Actions
+name: Daily News Update
+
+on:
+  # 每天凌晨3点自动运行
+  schedule:
+    - cron: '0 3 * * *'
+  # 也可以手动触发
+  workflow_dispatch:
+  # 每次代码推送时运行
+  push:
+    branches:
+      - main
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. 检出代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # 2. 设置Python环境
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      # 3. 安装依赖
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 lxml
+      
+      # 4. 运行抓取脚本
+      - name: Run scraper
+        run: |
+          python scraper.py
+        env:
+          # 可以在这里添加API密钥等环境变量
+          PROPUBLICA_API_KEY: ${{ secrets.PROPUBLICA_API_KEY }}
+          COINDESK_API_KEY: ${{ secrets.COINDESK_API_KEY }}
+      
+      # 5. 提交更改
+      - name: Commit and push
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "🤖 自动更新新闻数据 $(date '+%Y-%m-%d %H:%M')"
+          file_pattern: public/index.html news_data.json
+
+      # 6. 部署到 Vercel (可选)
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
