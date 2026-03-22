@@ -1,6 +1,1 @@
-{
-  "buildCommand": "python scraper.py",
-  "outputDirectory": "public",
-  "installCommand": "pip install -r requirements.txt",
-  "framework": null
-}
+{"outputDirectory": "public"}
