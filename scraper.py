@@ -8,29 +8,29 @@ def get_proxy():
     try:
         r = requests.get(PROXY_API, timeout=10)
         text = r.text.strip()
-        if text:
-            # 返回格式: ip:端口
-            return text
+        if text and ":" in text:
+            ip, port = text.split(":")
+            return {"http": f"http://18601139993:Pcdog1234@{ip}:{port}", "https": f"http://18601139993:Pcdog1234@{ip}:{port}"}
     except Exception as e:
         print(f"Proxy error: {e}")
     return None
 
 def main():
-    print("全球深度资讯抓取器 v4")
+    print("全球深度资讯抓取器 v5")
     
-    # 获取代理
     proxy = get_proxy()
-    print(f"Proxy: {proxy or 'Direct'}")
+    print(f"Proxy: {proxy}")
+    
+    # 新闻来源
+    sources = ["ProPublica", "ZeroHedge", "The Intercept", "The Grayzone", "CoinDesk", "观察者网", "BBC", "The Atlantic", "Politico", "Axios", "Punchbowl", "The Block", "Decrypt"]
+    cats = ["调查", "金融", "调查", "调查", "加密", "地缘", "商业", "政治", "政治", "政治", "政治", "加密", "加密"]
     
     news = []
-    sources = ["ProPublica", "ZeroHedge", "The Intercept", "The Grayzone", "CoinDesk", "观察者网", "BBC", "The Atlantic", "Politico", "Axios", "Punchbowl"]
-    cats = ["调查", "金融", "调查", "调查", "加密", "地缘", "商业", "政治", "政治", "政治", "政治"]
-    
     for i, src in enumerate(sources):
         news.append({"title": f"{src} 深度报道", "desc": f"来自 {src} 的最新分析", "source": src, "category": cats[i]})
     
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
-    html = f'''<!DOCTYPE html><html><head><meta charset="UTF-8"><title>全球深度观点</title><script src="https://cdn.tailwindcss.com"></script></head><body style="background:#0a0a0f;color:#fff;font-family:sans-serif"><header style="background:#000;padding:24px"><h1 style="font-size:32px;background:linear-gradient(90deg,#ef4444,#f97316);-webkit-background-clip:text">全球深度观点</h1><p style="color:#999">最后更新: {timestamp} | 代理: {proxy or "直连"}</p></header><main style="max-width:1200px;margin:0 auto;padding:32px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:32px">
+    html = f'''<!DOCTYPE html><html><head><meta charset="UTF-8"><title>全球深度观点</title><script src="https://cdn.tailwindcss.com"></script></head><body style="background:#0a0a0f;color:#fff;font-family:sans-serif"><header style="background:#000;padding:24px"><h1 style="font-size:32px;background:linear-gradient(90deg,#ef4444,#f97316);-webkit-background-clip:text">全球深度观点</h1><p style="color:#999">最后更新: {timestamp}</p></header><main style="max-width:1200px;margin:0 auto;padding:32px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:32px">
 '''
     for i, src in enumerate(sources):
         html += f'<div style="background:rgba(255,255,255,0.05);padding:12px;border-radius:8px;text-align:center"><div style="color:#999;font-size:12px">{src}</div><div style="font-size:20px;font-weight:bold">1</div></div>'
